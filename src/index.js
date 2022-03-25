@@ -6,8 +6,8 @@ function Square(props) {
   const winningSquareStyle = {
     backgroundColor: '#ccc'
   }
-  console.log("Winning square within square: ", props.winningSquare);
   return (
+    // set style of square depending on whether a player has yet won
     <button className="square" onClick={props.onClick} style={props.winningSquare ? winningSquareStyle : null}>
       {props.value}
     </button>
@@ -16,10 +16,8 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
+    // calculate whether a player has yet won for the purpose of highlighting winning squares
     let winningSquare = this.props.winner && this.props.winner.includes(i) ? true : false;
-    console.log("Winning square: ", winningSquare);
-    console.log("Winner: ", this.props.winner);
-    // console.log("Includes i: ", this.props.winner.includes(i) ? this.props.winner.includes(i) : null);
     return (
       <Square
         value={this.props.squares[i]}
@@ -45,7 +43,7 @@ class Board extends React.Component {
       }
       allSquares.push(<div className="board-row" key={row}>{boardRow}</div>);
     }
-    console.log(allSquares);
+    // console.log(allSquares);
 
     return (
         <div>
@@ -113,7 +111,7 @@ class Game extends React.Component {
     const ascending = this.state.ascending;
     const winningLine = winner ? winner.winningLine: null;
 
-    console.log(winningLine);
+    // console.log(winningLine);
 
     const moves = history.map((step, move, history) => {      
       const desc = move ?
