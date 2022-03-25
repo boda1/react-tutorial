@@ -6,37 +6,20 @@ function Square(props) {
   const winningSquareStyle = {
     backgroundColor: '#ccc'
   }
-  
+  console.log("Winning square within square: ", props.winningSquare);
   return (
-    <button className="square" onClick={props.onClick} style={props.winningsquare ? winningSquareStyle: null}>
+    <button className="square" onClick={props.onClick} style={props.winningSquare ? winningSquareStyle : null}>
       {props.value}
     </button>
   );
 }
 
 class Board extends React.Component {
-  
-  // render the 9 squares of the game, renderRows() creates three divs for each row of the board and calls renderAllSquares to populate those
-  // divs with three squares
-
-  renderRows() {
-    const rowsHTML = [];
-    for (let i=0; i<7; i+=3) {
-      rowsHTML.push(<div className="board-row" key={i}>{this.renderAllSquares(i)}</div>);
-    }
-    return rowsHTML;
-  }
-  
-  renderAllSquares(i) {  
-    const squaresHTML = [];
-      for (let j=0; j<3; j++) {
-         squaresHTML.push(this.renderSquare(i + j)); 
-      }
-    return squaresHTML;
-  }
-  
   renderSquare(i) {
-    let winningSquare = this.props.winner && this.props.winner.includes(i) ? true: false;
+    let winningSquare = this.props.winner && this.props.winner.includes(i) ? true : false;
+    console.log("Winning square: ", winningSquare);
+    console.log("Winner: ", this.props.winner);
+    // console.log("Includes i: ", this.props.winner.includes(i) ? this.props.winner.includes(i) : null);
     return (
       <Square
         value={this.props.squares[i]}
@@ -47,9 +30,26 @@ class Board extends React.Component {
   }
 
   render() {
+
+    // create three rows containing three squares each
+    
+    // 0 1 2
+    // 3 4 5 
+    // 6 7 8
+
+    let allSquares = [];
+    for (let row = 0; row < 3; row++) {
+      let boardRow = [];
+      for (let col = 0; col < 3; col++) {
+        boardRow.push(<span key={(row * 3) + col}>{this.renderSquare((row * 3) + col)}</span>)
+      }
+      allSquares.push(<div className="board-row" key={row}>{boardRow}</div>);
+    }
+    console.log(allSquares);
+
     return (
         <div>
-          {this.renderRows()}
+          {allSquares}
         </div>
     );
   }
@@ -139,7 +139,7 @@ class Game extends React.Component {
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
-            winner={winner && winner.winningSquares}
+            winner={winner && winner.winningLine}
           />
         </div>
         <div className="game-info">
